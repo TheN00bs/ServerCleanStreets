@@ -7,8 +7,6 @@ from flask import jsonify
 global client, db, activeCollection, completedCollection, trashCollection
 
 
-
-
 def connectToDB():
         global client, db, activeCollection, completedCollection, trashCollection
         client = pymongo.MongoClient("mongodb+srv://mahershi1999:mahershi1999@mahershi-6eyea.mongodb.net/<CleanStreets>?retryWrites=true&w=majority")
@@ -31,25 +29,30 @@ def home(email):
         query = {"user": email}
         
         txt = {}
-        reqHistory = list()
+        reqHistory = []
         
         doc = activeCollection.find(query)
         for x in doc:
+                print(x)
                 txt["id"] = str(x['_id'])
-                txt["user"] = x['title']
-                reqHistory.append(txt)
+                txt["title"] = x['title']
+                print("TXT: " + str(txt))
+                reqHistory.append(txt.copy())
+                print("Req: " + str(reqHistory))
 
         doc = trashCollection.find(query)
         for x in doc:
                 txt["id"] = str(x['_id'])
-                txt["user"] = x['title']
-                reqHistory.append(txt)
+                txt["title"] = x['title']
+                reqHistory.append(txt.copy())
         doc = completedCollection.find(query)
         for x in doc:
                 txt["id"] = str(x['_id'])
-                txt["user"] = x['title']
-                reqHistory.append(txt)
+                txt["title"] = x['title']
+                reqHistory.append(txt.copy())
 
+        print("Here...")
+        print(reqHistory)
         x = jsonify(reqHistory)
         #x = json.dumps(reqHistory, cls=JSONEncoder)
         print(type(x))
@@ -58,17 +61,20 @@ def home(email):
 
         
         
-        
-
 @app.route('/newrequest', methods=['POST'])
 def newRequest():
         reqJson = request.get_json()
         print(reqJson)
+        activeCollection.insert_one(reqJson)
+        return "Success"
 
-@app.route('/delrequest', methods=['POST'])
+
+"""@app.route('/delrequest', methods=['POST'])
 def deleteRequest():
         reqJson = request.get_json()
         print(reqJson)
+        return "Success"
+"""
 
 
 if __name__ == "main":
