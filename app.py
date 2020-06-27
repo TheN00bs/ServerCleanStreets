@@ -2,17 +2,11 @@ from flask import Flask
 from flask import request
 import json
 import pymongo
-from bson import ObjectId
 from flask import jsonify
 
 global client, db, activeCollection, completedCollection, trashCollection
 
 
-class JSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, ObjectId):
-            return str(o)
-        return json.JSONEncoder.default(self, o)
 
 
 def connectToDB():
