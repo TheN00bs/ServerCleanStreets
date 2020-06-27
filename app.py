@@ -1,23 +1,83 @@
 from flask import Flask
 from flask import request
 import json
+import pymongo
+from bson import ObjectId
+from flask import jsonify
+
+global client, db, activeCollection, completedCollection, trashCollection
+
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
+
+def connectToDB():
+        global client, db, activeCollection, completedCollection, trashCollection
+        client = pymongo.MongoClient("mongodb+srv://mahershi1999:mahershi1999@mahershi-6eyea.mongodb.net/<CleanStreets>?retryWrites=true&w=majority")
+        db = client["CleanStreets"]
+        activeCollection = db["activerequests"]
+        completedCollection = db["competedrequests"]
+        trashCollection = db["trashrequests"]
+
+connectToDB()
 
 app = Flask(__name__)
 
 @app.route('/')
 def default():
-    return "Hello"
+        return "Hello"
+
+@app.route('/<email>')
+def home(email):
+        global activeCollection, completedCollection, trashCollection
+        query = {"user": email}
+        
+        txt = {}
+        reqHistory = list()
+        
+        doc = activeCollection.find(query)
+        for x in doc:
+                txt["id"] = str(x['_id'])
+                txt["user"] = x['title']
+                reqHistory.append(txt)
+
+        doc = trashCollection.find(query)
+        for x in doc:
+                txt["id"] = str(x['_id'])
+                txt["user"] = x['title']
+                reqHistory.append(txt)
+        doc = completedCollection.find(query)
+        for x in doc:
+                txt["id"] = str(x['_id'])
+                txt["user"] = x['title']
+                reqHistory.append(txt)
+
+        x = jsonify(reqHistory)
+        #x = json.dumps(reqHistory, cls=JSONEncoder)
+        print(type(x))
+        print(x)
+        return x
+
+        
+        
+        
 
 @app.route('/newrequest', methods=['POST'])
-def requestHandler():
+def newRequest():
         reqJson = request.get_json()
         print(reqJson)
 
-"""@app.route('/delrequest', methods=['POST'])
-def requestHandler():
+@app.route('/delrequest', methods=['POST'])
+def deleteRequest():
         reqJson = request.get_json()
         print(reqJson)
-"""
+
 
 if __name__ == "main":
-    app.run()
+        app.run()
+
+
