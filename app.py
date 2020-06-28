@@ -70,6 +70,9 @@ def returnReqData(email, id):
                 doc = completedCollection.find_one({"_id": id})
         if doc is None:
                 doc = trashCollection.find_one({"_id": id})
+
+        
+        doc['_id'] = str(doc['_id'])
         
         print(doc)
         print(type(doc))
