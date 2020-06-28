@@ -82,7 +82,7 @@ def returnReqData(id):
 def newRequest():
         reqJson = request.get_json()
         print(reqJson)
-        id = activeCollection.insert_one(reqJson)
+        id = activeCollection.insert(reqJson)
         
         txt = dict()
         txt["title"] = reqJson["title"]
