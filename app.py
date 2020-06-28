@@ -62,14 +62,14 @@ def home(email):
 
         
 @app.route('/<email>/<id>')
-def returnReqData():
+def returnReqData(id):
         global activeCollection, completedCollection, trashCollection
         id = ObjectId(id)
         doc = activeCollection.find_one({"_id": id})
         if doc is None:
                 doc = completedCollection.find_one({"_id": id})
         if doc is None:
-                doc = trashedCollection.find_one({"_id": id})
+                doc = trashCollection.find_one({"_id": id})
         
         print(doc)
         print(type(doc))
