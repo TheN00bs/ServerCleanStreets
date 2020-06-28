@@ -62,7 +62,7 @@ def home(email):
 
         
 @app.route('/<email>/<id>')
-def returnReqData(id):
+def returnReqData(email, id):
         global activeCollection, completedCollection, trashCollection
         id = ObjectId(id)
         doc = activeCollection.find_one({"_id": id})
