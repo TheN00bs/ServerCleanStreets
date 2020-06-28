@@ -82,14 +82,13 @@ def returnReqData(id):
 def newRequest():
         reqJson = request.get_json()
         print(reqJson)
-        doc = activeCollection.insert_one(reqJson)
+        id = activeCollection.insert_one(reqJson)
+        
         txt = dict()
-        if doc.isAcknowledged():
-                txt["title"] = reqJson["title"]
-                txt["id"] = str(doc.getInsertedId())
-                return txt
-        else:
-                return txt
+        txt["title"] = reqJson["title"]
+        txt["id"] = str(id)
+        return txt
+        
 
 
 """@app.route('/delrequest', methods=['POST'])
