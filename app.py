@@ -3,6 +3,7 @@ from flask import request
 import json
 import pymongo
 from flask import jsonify
+from bson import ObjectId
 
 global client, db, activeCollection, completedCollection, trashCollection
 
@@ -60,13 +61,37 @@ def home(email):
         return x
 
         
+@app.route('/<email>/<id>'):
+def returnReqData():
+        global activeCollection, completedCollection, trashCollection
+        id = ObjectId(id)
+        doc = activeCollection.find_one({"_id": id})
+        if doc is None:
+                doc = completedCollection.find_one({"_id": id})
+        if doc is None:
+                doc = trashedCollection.find_one({"_id": id})
+        
+        print(doc)
+        print(type(doc))
+
+        return doc
+
+
         
 @app.route('/newrequest', methods=['POST'])
 def newRequest():
         reqJson = request.get_json()
         print(reqJson)
-        activeCollection.insert_one(reqJson)
-        return "Success"
+        doc = activeCollection.insert_one(reqJson)
+        print("Return from DB: ")
+        print(doc)
+        if doc["acknowledged"]:
+                doc["title"] = reqJson["title"]
+                print("Return to user: ")
+                print(doc)
+                return doc
+        else:
+                return doc
 
 
 """@app.route('/delrequest', methods=['POST'])
