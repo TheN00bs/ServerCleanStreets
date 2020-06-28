@@ -61,7 +61,7 @@ def home(email):
         return x
 
         
-@app.route('/<email>/<id>'):
+@app.route('/<email>/<id>')
 def returnReqData():
         global activeCollection, completedCollection, trashCollection
         id = ObjectId(id)
