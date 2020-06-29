@@ -37,7 +37,6 @@ def home(email):
         
         doc = activeCollection.find(query)
         for x in doc:
-                print(x)
                 #x["_id"] = str(x["_id"])
                 txt["id"] = str(x['_id'])
                 txt["title"] = x['title']
