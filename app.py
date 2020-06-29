@@ -32,30 +32,31 @@ def home(email):
         global activeCollection, completedCollection, trashCollection
         query = {"user": email}
         
+        txt = {}
         reqHistory = []
         
         doc = activeCollection.find(query)
         for x in doc:
                 print(x)
-                x["_id"] = str(x["_id"])
-                #txt["id"] = str(x['_id'])
-                #txt["title"] = x['title']
-                #print("TXT: " + str(txt))
-                reqHistory.append(x.copy())
+                #x["_id"] = str(x["_id"])
+                txt["id"] = str(x['_id'])
+                txt["title"] = x['title']
+                print("TXT: " + str(txt))
+                reqHistory.append(txt.copy())
                 print("Req: " + str(reqHistory))
 
         doc = trashCollection.find(query)
         for x in doc:
                 x["_id"] = str(x["_id"])
-                #txt["id"] = str(x['_id'])
-                #txt["title"] = x['title']
-                reqHistory.append(x.copy())
+                txt["id"] = str(x['_id'])
+                txt["title"] = x['title']
+                reqHistory.append(txt.copy())
         doc = completedCollection.find(query)
         for x in doc:
-                x["_id"] = str(x["_id"])
-                #txt["id"] = str(x['_id'])
-                #txt["title"] = x['title']
-                reqHistory.append(x.copy())
+                #x["_id"] = str(x["_id"])
+                txt["id"] = str(x['_id'])
+                txt["title"] = x['title']
+                reqHistory.append(txt.copy())
 
         print("Here...")
         print(reqHistory)
