@@ -13,7 +13,7 @@ global client, db, activeCollection, completedCollection, trashCollection
 
 def connectToDB():
         global client, db, activeCollection, completedCollection, trashCollection
-        client = pymongo.MongoClient("mongodb+srv://mahershi1999:mahershi1999@mahershi-6eyea.mongodb.net/<CleanStreets>?retryWrites=true&w=majority")
+        client = pymongo.MongoClient("mongodb+srv://mahershi1999:<password>@mahershi-6eyea.mongodb.net/<CleanStreets>?retryWrites=true&w=majority")
         db = client["CleanStreets"]
         activeCollection = db["activerequests"]
         completedCollection = db["competedrequests"]
